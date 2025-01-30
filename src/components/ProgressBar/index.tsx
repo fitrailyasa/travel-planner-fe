@@ -12,7 +12,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ step, decrementStep }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-between px-4 py-2">
+    <div className="flex items-center justify-between px-6 py-2 max-w-[700px] mx-auto">
       <button
         className="text-xl text-gray-600 hover:text-gray-800 mr-4 py-2"
         onClick={() => {

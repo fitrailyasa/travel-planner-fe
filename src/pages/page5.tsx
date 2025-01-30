@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Input, Button } from "@heroui/react";
+import { Button } from "@heroui/react";
 
 type Page5FormInputs = {
   data1: string;
@@ -8,9 +8,8 @@ type Page5FormInputs = {
 
 const Page5 = () => {
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
   } = useForm<Page5FormInputs>();
 
   /* eslint-disable no-console */
@@ -19,39 +18,22 @@ const Page5 = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Page 5</h1>
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Input
-            label="Data 1"
-            type="text"
-            variant="bordered"
-            {...register("data1", { required: "data1 wajib diisi" })}
-          />
-          {errors.data1 && (
-            <p className="text-red-500 text-sm">{errors.data1.message}</p>
-          )}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
+          <h1 className="text-2xl font-bold mb-4">Page 5</h1>
+          <p className="mb-5">Ini adalah halaman 5.</p>
         </div>
-        <div>
-          <Input
-            label="Data 2"
-            type="text"
-            variant="bordered"
-            {...register("data2", { required: "data2 wajib diisi" })}
-          />
-          {errors.data2 && (
-            <p className="text-red-500 text-sm">{errors.data2.message}</p>
-          )}
+        <div className="w-full fixed bottom-0 bg-white dark:bg-black shadow-lg py-4 flex justify-center">
+          <Button
+            className="w-3/4 fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full max-w-[700px]"
+            type="submit"
+          >
+            Submit
+          </Button>
         </div>
-        <Button
-          className="w-3/4 fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full max-w-[700px]"
-          type="submit"
-        >
-          Submit
-        </Button>
       </form>
-    </div>
+    </>
   );
 };
 
