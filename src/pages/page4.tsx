@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -49,76 +50,100 @@ export const CustomRadio = (props: any) => {
 
 const Page4: React.FC<Page4Props> = ({ setStep }) => {
   const navigate = useNavigate();
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const { control, handleSubmit, setValue, watch } = useForm({
+    defaultValues: {
+      page_4: localStorage.getItem("page_4") || "",
+    },
+  });
+
+  const selectedValue = watch("page_4");
+
+  useEffect(() => {
+    const savedValue = localStorage.getItem("page_4");
+
+    if (savedValue) {
+      setValue("page_4", savedValue);
+    }
+  }, [setValue]);
 
   const radioOptions = [
     {
-      value: "data1",
+      id: "data1",
       label: "Data 1",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
-      value: "data2",
+      id: "data2",
       label: "Data 2",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
-      value: "data3",
+      id: "data3",
       label: "Data 3",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
-      value: "data4",
+      id: "data4",
       label: "Data 4",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
-      value: "data5",
+      id: "data5",
       label: "Data 5",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
-      value: "data6",
+      id: "data6",
       label: "Data 6",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
   ];
 
+  const onSubmit = (data: { page_4: string }) => {
+    localStorage.setItem("page_4", data.page_4);
+    setStep(5);
+    navigate("/page5");
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
         <h1 className="text-2xl font-bold mb-4">Page 4</h1>
         <p className="mb-5">Ini adalah halaman 4.</p>
 
-        <RadioGroup
-          orientation="horizontal"
-          value={selectedValue}
-          onChange={(event) => setSelectedValue(event.target.value)}
-        >
-          {radioOptions.map((option) => (
-            <CustomRadio
-              key={option.value}
-              description={option.description}
-              value={option.value}
+        <Controller
+          control={control}
+          name="page_4"
+          render={({ field }) => (
+            <RadioGroup
+              orientation="horizontal"
+              value={field.value}
+              onChange={(id) => field.onChange(id)}
             >
-              {option.label}
-            </CustomRadio>
-          ))}
-        </RadioGroup>
+              {radioOptions.map((option) => (
+                <CustomRadio
+                  key={option.id}
+                  description={option.description}
+                  value={option.id}
+                >
+                  {option.label}
+                </CustomRadio>
+              ))}
+            </RadioGroup>
+          )}
+        />
       </div>
+
       <div className="w-full fixed bottom-0 bg-white dark:bg-black shadow-lg py-4 flex justify-center">
         <Button
           className="w-3/4 max-w-[700px] bg-green-600 text-white px-4 py-2 rounded-full"
           isDisabled={!selectedValue}
-          onPress={() => {
-            setStep(5);
-            navigate("/page5");
-          }}
+          type="submit"
         >
           Next
         </Button>
       </div>
-    </>
+    </form>
   );
 };
 
