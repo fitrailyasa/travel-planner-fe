@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@heroui/react";
+import { Link } from "react-router-dom";
+
+import DateIcon from "@/components/Icons/dateIcon";
+import LocationIcon from "@/components/Icons/locationIcon";
+import MoneyIcon from "@/components/Icons/moneyIcon";
+import PencilIcon from "@/components/Icons/pencilIcon";
+import StarIcon from "@/components/Icons/starIcon";
+import UsersIcon from "@/components/Icons/usersIcon";
 
 type Page5FormInputs = {
   data1: string;
@@ -78,20 +86,50 @@ const Page5 = () => {
           <h1 className="text-2xl font-bold mb-4">Page 5</h1>
           <p className="mb-5">Ini adalah halaman 5.</p>
           <div className="mb-4">
-            <h3 className="mt-3 font-bold">Destionation</h3>
+            <h3 className="mt-3 font-bold flex items-center border-t-1 pt-2 gap-2">
+              <span>
+                <LocationIcon />
+              </span>
+              Destination
+              <Link className="ml-auto" to="/">
+                <PencilIcon />
+              </Link>
+            </h3>
             <p>{formData?.destination || "Not available"}</p>
 
             {/* Page 1 */}
-            <h3 className="mt-3 font-bold">Party</h3>
+            <h3 className="mt-3 font-bold flex items-center border-t-1 pt-2 gap-2">
+              <span>
+                <UsersIcon />
+              </span>
+              Party
+              <Link className="ml-auto" to="/page1">
+                <PencilIcon />
+              </Link>
+            </h3>
             <p>{formData?.page_1 || "Not available"}</p>
 
             {/* Page 2 */}
-            <h3 className="mt-3 font-bold">Trip Dates</h3>
+            <h3 className="mt-3 font-bold flex items-center border-t-1 pt-2 gap-2">
+              <span>
+                <DateIcon />
+              </span>
+              Trip Dates
+              <Link className="ml-auto" to="/page2">
+                <PencilIcon />
+              </Link>
+            </h3>
             <p>{tripDates || "Not available"}</p>
 
             {/* Page 3 */}
-            <h3 className="mt-3 font-bold">
+            <h3 className="mt-3 font-bold flex items-center border-t-1 pt-2 gap-2">
+              <span>
+                <StarIcon />
+              </span>
               {formData?.page_3?.length} Interests
+              <Link className="ml-auto" to="/page3">
+                <PencilIcon />
+              </Link>
             </h3>
             <ul>
               {formData?.page_3?.map((interest: string, index: number) => (
@@ -100,7 +138,15 @@ const Page5 = () => {
             </ul>
 
             {/* Page 4 */}
-            <h3 className="mt-3 font-bold">Budget</h3>
+            <h3 className="mt-3 font-bold flex items-center border-t-1 pt-2 gap-2">
+              <span>
+                <MoneyIcon />
+              </span>
+              Budget
+              <Link className="ml-auto text-blue-500" to="/page4">
+                <PencilIcon />
+              </Link>
+            </h3>
             <p>{formData?.page_4 || "Not available"}</p>
           </div>
         </div>
