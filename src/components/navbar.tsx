@@ -1,3 +1,5 @@
+// src/components/navbar.tsx
+
 import { Kbd, Link, Input } from "@heroui/react";
 import {
   Navbar as HeroUINavbar,
@@ -11,7 +13,8 @@ import {
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
 
-import { siteConfig } from "@/config/site";
+// ✅ Import siteConfig with proper types
+import { siteConfig, NavItem } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon } from "@/components/icons";
 import { Logo } from "@/components/icons";
@@ -52,7 +55,8 @@ export const Navbar = () => {
           </Link>
         </NavbarBrand>
         <div className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
+          {/* ✅ Explicitly type `item` as `NavItem` */}
+          {siteConfig.navItems.map((item: NavItem) => (
             <NavbarItem key={item.href}>
               <Link
                 className={clsx(
@@ -87,8 +91,9 @@ export const Navbar = () => {
       <NavbarMenu>
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
+          {/* ✅ Explicitly type `item` as `NavItem` */}
+          {siteConfig.navMenuItems.map((item: NavItem, index) => (
+            <NavbarMenuItem key={`${item.href}-${index}`}>
               <Link
                 color={
                   index === 2
@@ -97,7 +102,7 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}
