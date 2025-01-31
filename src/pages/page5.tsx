@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@heroui/react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import DateIcon from "@/components/Icons/dateIcon";
 import LocationIcon from "@/components/Icons/locationIcon";
@@ -11,9 +12,14 @@ import StarIcon from "@/components/Icons/starIcon";
 import UsersIcon from "@/components/Icons/usersIcon";
 
 type Page5FormInputs = {
-  data1: string;
-  data2: string;
+  destination: string;
+  page_1: string;
+  page_2: string & { start: number; end: number };
+  page_3: string[];
+  page_4: string;
 };
+
+const API_URL = import.meta.env.VITE_APP_URL;
 
 const Page5 = () => {
   const [formData, setFormData] = useState<any>({});
@@ -74,9 +80,25 @@ const Page5 = () => {
     formState: {},
   } = useForm<Page5FormInputs>();
 
-  /* eslint-disable no-console */
-  const onSubmit = (data: Page5FormInputs) => {
-    console.log("Page5 Data:", data);
+  const onSubmit = async (data: Page5FormInputs) => {
+    try {
+      const payload = {
+        ...formData,
+        additionalData: data,
+      };
+
+      const response = await axios.post(`${API_URL}/submit`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Data berhasil dikirim:", response.data);
+      alert("Data berhasil dikirim!");
+    } catch (error) {
+      console.error("Error mengirim data:", error);
+      alert("Gagal mengirim data.");
+    }
   };
 
   return (
