@@ -69,32 +69,32 @@ const Page4: React.FC<Page4Props> = ({ setStep }) => {
   const radioOptions = [
     {
       id: "data1",
-      label: "Data 1",
+      name: "Data 1",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: "data2",
-      label: "Data 2",
+      name: "Data 2",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: "data3",
-      label: "Data 3",
+      name: "Data 3",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: "data4",
-      label: "Data 4",
+      name: "Data 4",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: "data5",
-      label: "Data 5",
+      name: "Data 5",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
     {
       id: "data6",
-      label: "Data 6",
+      name: "Data 6",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     },
   ];
@@ -124,9 +124,9 @@ const Page4: React.FC<Page4Props> = ({ setStep }) => {
                 <CustomRadio
                   key={option.id}
                   description={option.description}
-                  value={option.id}
+                  value={option.name}
                 >
-                  {option.label}
+                  {option.name}
                 </CustomRadio>
               ))}
             </RadioGroup>
