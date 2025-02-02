@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Input, Button, Card } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
+import axiosInstance from "@/api/axiosInstance";
 import DefaultLayout from "@/layouts/default";
 
 type LoginFormInputs = {
@@ -15,10 +17,29 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  /* eslint-disable no-console */
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log("Login Data:", data);
+  const onSubmit = async (data: LoginFormInputs) => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await axiosInstance.post("/auth/login", data);
+
+      localStorage.setItem("token", response.data.token);
+
+      navigate("/");
+    } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.error("Login Error:", error);
+      setErrorMessage(
+        error.response?.data?.message || "Login gagal, silakan coba lagi.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,6 +47,13 @@ export default function Login() {
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <Card className="p-8 w-full max-w-md shadow-lg">
           <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center mb-4">
+              {errorMessage}
+            </p>
+          )}
+
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Input
@@ -57,8 +85,12 @@ export default function Login() {
                 </p>
               )}
             </div>
-            <Button className="w-full bg-green-600 text-white" type="submit">
-              Masuk
+            <Button
+              className="w-full bg-green-600 text-white"
+              disabled={loading}
+              type="submit"
+            >
+              {loading ? "Memproses..." : "Masuk"}
             </Button>
           </form>
           <div className="text-center mt-4">

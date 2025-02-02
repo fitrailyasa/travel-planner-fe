@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Input, Button, Card } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
+import axiosInstance from "@/api/axiosInstance";
 import DefaultLayout from "@/layouts/default";
 
 type RegisterFormInputs = {
@@ -16,10 +18,29 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormInputs>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  /* eslint-disable no-console */
-  const onSubmit = (data: RegisterFormInputs) => {
-    console.log("Register Data:", data);
+  const onSubmit = async (data: RegisterFormInputs) => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await axiosInstance.post("/auth/register", data);
+
+      localStorage.setItem("token", response.data.token);
+
+      navigate("/");
+    } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.error("Register Error:", error);
+      setErrorMessage(
+        error.response?.data?.message || "Registrasi gagal, silakan coba lagi.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,11 +50,18 @@ export default function Register() {
           <h2 className="text-2xl font-semibold text-center mb-6">
             Registrasi
           </h2>
+
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center mb-4">
+              {errorMessage}
+            </p>
+          )}
+
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Input
-                label="Name"
-                type="name"
+                label="Nama"
+                type="text"
                 variant="bordered"
                 {...register("name", { required: "Nama wajib diisi" })}
               />
@@ -71,10 +99,15 @@ export default function Register() {
                 </p>
               )}
             </div>
-            <Button className="w-full bg-green-600 text-white" type="submit">
-              Daftar
+            <Button
+              className="w-full bg-green-600 text-white"
+              disabled={loading}
+              type="submit"
+            >
+              {loading ? "Memproses..." : "Daftar"}
             </Button>
           </form>
+
           <div className="text-center mt-4">
             <p>
               Sudah punya akun?{" "}
