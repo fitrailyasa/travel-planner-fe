@@ -61,7 +61,7 @@ export default function Login() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 pt-16">
         <Card className="p-8 w-full max-w-md shadow-lg">
           <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
 
