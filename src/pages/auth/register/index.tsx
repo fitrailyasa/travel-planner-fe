@@ -29,9 +29,26 @@ export default function Register() {
     try {
       const response = await axiosInstance.post("/auth/register", data);
 
-      localStorage.setItem("token", response.data.token);
+      // eslint-disable-next-line no-console
+      console.log("Register Response:", response);
 
-      navigate("/");
+      if (
+        response.data &&
+        response.data.tokens &&
+        response.data.tokens.access
+      ) {
+        localStorage.setItem("access_token", response.data.tokens.access.token);
+        localStorage.setItem(
+          "refresh_token",
+          response.data.tokens.refresh.token,
+        );
+
+        navigate("/");
+      } else {
+        throw new Error(
+          "Token akses atau refresh tidak ditemukan dalam respons.",
+        );
+      }
     } catch (error: any) {
       // eslint-disable-next-line no-console
       console.error("Register Error:", error);
@@ -45,7 +62,7 @@ export default function Register() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-6 md:py-8">
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <Card className="p-8 w-full max-w-md shadow-lg">
           <h2 className="text-2xl font-semibold text-center mb-6">
             Registrasi

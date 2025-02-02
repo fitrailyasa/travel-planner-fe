@@ -28,9 +28,26 @@ export default function Login() {
     try {
       const response = await axiosInstance.post("/auth/login", data);
 
-      localStorage.setItem("token", response.data.token);
+      // eslint-disable-next-line no-console
+      console.log("Login Response:", response);
 
-      navigate("/");
+      if (
+        response.data &&
+        response.data.tokens &&
+        response.data.tokens.access
+      ) {
+        localStorage.setItem("access_token", response.data.tokens.access.token);
+        localStorage.setItem(
+          "refresh_token",
+          response.data.tokens.refresh.token,
+        );
+
+        navigate("/");
+      } else {
+        throw new Error(
+          "Token akses atau refresh tidak ditemukan dalam respons.",
+        );
+      }
     } catch (error: any) {
       // eslint-disable-next-line no-console
       console.error("Login Error:", error);
