@@ -25,6 +25,7 @@ const API_URL = import.meta.env.VITE_APP_URL;
 const Page5 = () => {
   const [formData, setFormData] = useState<any>({});
   const [tripDates, setTripDates] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -79,7 +80,7 @@ const Page5 = () => {
     }).format(number);
   };
 
-  const onSubmit = async (data: Page5FormInputs) => {
+  const onSubmit = async (_data: Page5FormInputs) => {
     setErrorMessage("");
 
     const accessToken = localStorage.getItem("access_token");
