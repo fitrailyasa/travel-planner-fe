@@ -69,35 +69,37 @@ const Page4: React.FC<Page4Props> = ({ setStep }) => {
   const radioOptions = [
     {
       id: "data1",
-      name: "Data 1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 100000,
     },
     {
       id: "data2",
-      name: "Data 2",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 1000000,
     },
     {
       id: "data3",
-      name: "Data 3",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 10000000,
     },
     {
       id: "data4",
-      name: "Data 4",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 100000000,
     },
     {
       id: "data5",
-      name: "Data 5",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 1000000000,
     },
     {
       id: "data6",
-      name: "Data 6",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      budget: 10000000000,
     },
   ];
+
+  const formatRupiah = (number: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(number);
+  };
 
   const onSubmit = (data: { page_4: string }) => {
     localStorage.setItem("page_4", data.page_4);
@@ -108,8 +110,8 @@ const Page4: React.FC<Page4Props> = ({ setStep }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
-        <h1 className="text-2xl font-bold mb-4">Page 4</h1>
-        <p className="mb-5">Ini adalah halaman 4.</p>
+        <h1 className="text-2xl font-bold mb-4">Your Budget</h1>
+        <p className="mb-5">Please choose your budget</p>
 
         <Controller
           control={control}
@@ -121,12 +123,8 @@ const Page4: React.FC<Page4Props> = ({ setStep }) => {
               onChange={(id) => field.onChange(id)}
             >
               {radioOptions.map((option) => (
-                <CustomRadio
-                  key={option.id}
-                  description={option.description}
-                  value={option.name}
-                >
-                  {option.name}
+                <CustomRadio key={option.id} value={option.budget.toString()}>
+                  {">= " + formatRupiah(option.budget)}
                 </CustomRadio>
               ))}
             </RadioGroup>

@@ -69,33 +69,23 @@ const Page1: React.FC<Page1Props> = ({ setStep }) => {
   const radioOptions = [
     {
       id: "data1",
-      name: "Data 1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      name: "Only Me",
+      description: "No partner or friends",
     },
     {
       id: "data2",
-      name: "Data 2",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      name: "Couple",
+      description: "Couple with a partner",
     },
     {
       id: "data3",
-      name: "Data 3",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      name: "Friends",
+      description: "With friends only",
     },
     {
       id: "data4",
-      name: "Data 4",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      id: "data5",
-      name: "Data 5",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      id: "data6",
-      name: "Data 6",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      name: "Work",
+      description: "With work partners",
     },
   ];
 
@@ -108,8 +98,8 @@ const Page1: React.FC<Page1Props> = ({ setStep }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
-        <h1 className="text-2xl font-bold mb-4">Page 1</h1>
-        <p className="mb-5">Ini adalah halaman 1.</p>
+        <h1 className="text-2xl font-bold mb-4">Who is your partner?</h1>
+        <p className="mb-5">Please select your partner</p>
 
         <Controller
           control={control}

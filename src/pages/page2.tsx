@@ -88,8 +88,8 @@ const Page2: React.FC<Page2Props> = ({ setStep }) => {
   return (
     <>
       <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
-        <h1 className="text-2xl font-bold mb-4">Page 2</h1>
-        <p className="mb-5">Ini adalah halaman 2.</p>
+        <h1 className="text-2xl font-bold mb-4">When will you travel start?</h1>
+        <p className="mb-5">Select the date range.</p>
         <div className="flex justify-center">
           <Controller
             control={control}

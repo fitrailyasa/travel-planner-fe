@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,6 +12,11 @@ import {
 
 interface Page3Props {
   setStep: (step: number) => void;
+}
+
+interface Category {
+  id: number;
+  name: string;
 }
 
 export const CustomCheckbox = (props: any) => {
@@ -82,8 +87,12 @@ export const CheckIcon = (props: any) => {
 
 const Page3: React.FC<Page3Props> = ({ setStep }) => {
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_APP_URL;
 
-  const [selectedValue, setSelectedValue] = React.useState<string[]>(() => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<string[]>(() => {
     const saved = localStorage.getItem("page_3");
 
     return saved ? JSON.parse(saved) : [];
@@ -95,25 +104,40 @@ const Page3: React.FC<Page3Props> = ({ setStep }) => {
     },
   });
 
+  // Fetch Categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) throw new Error("Token tidak ditemukan");
+
+        const response = await fetch(`${API_URL}/categories`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error("Gagal mengambil data kategori");
+
+        const result = await response.json();
+
+        setCategories(result.data);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : "Terjadi kesalahan");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     setValue("page_3", selectedValue);
     localStorage.setItem("page_3", JSON.stringify(selectedValue));
   }, [selectedValue, setValue]);
-
-  const checkboxOptions = [
-    "Lorem Ipsum 1",
-    "Lorem Ipsum 2",
-    "Lorem Ipsum 3",
-    "Lorem Ipsum 4",
-    "Lorem Ipsum 5",
-    "Lorem Ipsum 6",
-    "Lorem Ipsum 7",
-    "Lorem Ipsum 8",
-    "Lorem Ipsum 9",
-    "Lorem Ipsum 10",
-    "Lorem Ipsum 11",
-    "Lorem Ipsum 12",
-  ];
 
   const onSubmit = () => {
     localStorage.setItem("page_3", JSON.stringify(selectedValue));
@@ -124,41 +148,50 @@ const Page3: React.FC<Page3Props> = ({ setStep }) => {
   return (
     <>
       <div className="w-3/4 mx-auto max-w-[700px] md:px-6 lg:px-8 mb-20">
-        <h1 className="text-2xl font-bold mb-4">Page 3</h1>
-        <p className="mb-5">Ini adalah halaman 3.</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CheckboxGroup
-            className="gap-1"
-            orientation="horizontal"
-            value={selectedValue}
-            onChange={(values) => setSelectedValue(values)}
-          >
-            {checkboxOptions.map((option) => (
-              <Controller
-                key={option}
-                control={control}
-                name="page_3"
-                render={({ field }) => (
-                  <CustomCheckbox
-                    {...field}
-                    isSelected={selectedValue.includes(option)}
-                    value={option}
-                    onChange={() => {
-                      const newSelected = selectedValue.includes(option)
-                        ? selectedValue.filter((v) => v !== option)
-                        : [...selectedValue, option];
+        <h1 className="text-2xl font-bold mb-4">Travel Categories</h1>
+        <p className="mb-5">Choose your category:</p>
 
-                      setSelectedValue(newSelected);
-                    }}
-                  >
-                    {option}
-                  </CustomCheckbox>
-                )}
-              />
-            ))}
-          </CheckboxGroup>
-        </form>
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+
+        {!loading && !error && (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CheckboxGroup
+              className="gap-1"
+              orientation="horizontal"
+              value={selectedValue}
+              onChange={(values) => setSelectedValue(values)}
+            >
+              {categories.map((category) => (
+                <Controller
+                  key={category.id}
+                  control={control}
+                  name="page_3"
+                  render={({ field }) => (
+                    <CustomCheckbox
+                      {...field}
+                      isSelected={selectedValue.includes(category.name)}
+                      value={category.name}
+                      onChange={() => {
+                        const newSelected = selectedValue.includes(
+                          category.name,
+                        )
+                          ? selectedValue.filter((v) => v !== category.name)
+                          : [...selectedValue, category.name];
+
+                        setSelectedValue(newSelected);
+                      }}
+                    >
+                      {category.name}
+                    </CustomCheckbox>
+                  )}
+                />
+              ))}
+            </CheckboxGroup>
+          </form>
+        )}
       </div>
+
       <div className="w-full fixed bottom-0 bg-white dark:bg-black shadow-lg py-4 flex justify-center">
         <Button
           className="w-3/4 max-w-[700px] bg-green-600 text-white px-4 py-2 rounded-full"

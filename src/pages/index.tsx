@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, CardFooter, Image } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Image } from "@heroui/react";
 
 import DefaultLayout from "@/layouts/default";
 
@@ -94,6 +94,17 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        <Button
+          as="a"
+          className="text-white"
+          color="success"
+          href="/plans/create"
+        >
+          Create Plan <span className="font-bold text-2xl mb-1.5">+</span>
+        </Button>
+        <Button as="a" color="primary" href="/plans">
+          See All Plan
+        </Button>
         <h1 className="text-2xl font-bold">Destinations</h1>
 
         {loading && <p>Loading destinations...</p>}
