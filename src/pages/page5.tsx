@@ -25,7 +25,6 @@ const API_URL = import.meta.env.VITE_APP_URL;
 const Page5 = () => {
   const [formData, setFormData] = useState<any>({});
   const [tripDates, setTripDates] = useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -223,6 +222,11 @@ const Page5 = () => {
           </div>
         </div>
         <div className="w-full fixed bottom-0 bg-white dark:bg-black shadow-lg py-4 flex justify-center">
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center mb-2">
+              {errorMessage}
+            </p>
+          )}
           <Button
             className="w-3/4 fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full max-w-[700px]"
             type="submit"
