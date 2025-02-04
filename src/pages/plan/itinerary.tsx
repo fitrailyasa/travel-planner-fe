@@ -32,7 +32,7 @@ export default function Itinerary({
 					}
 				);
 
-				if (!response.ok) throw new Error('Failed to fetch plan details');
+				if (!response.ok) throw new Error('Failed to create itinerary');
 
 				const result = await response.json();
 				setItinerary(result.data);

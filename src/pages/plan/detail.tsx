@@ -56,6 +56,35 @@ const PlanDetail: React.FC = () => {
 		setRefresh((prev) => prev + 1);
 	};
 
+	const handleDeleteDestination = async (activityId: string) => {
+		try {
+			const token = localStorage.getItem('access_token');
+
+			if (!token) {
+				throw new Error('Token tidak ditemukan');
+			}
+
+			const response = await fetch(
+				`${import.meta.env.VITE_APP_URL}/plans/destination/${activityId}`,
+				{
+					method: 'DELETE',
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+
+			if (!response.ok) throw new Error('Failed to delete');
+
+			alert('Delete success');
+			setRefresh((prevState) => prevState + 1);
+		} catch (error) {
+			setError(error instanceof Error ? error.message : 'An error occurred');
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
 		<DefaultLayout>
 			{isRequest && plan?.id && (
@@ -116,27 +145,38 @@ const PlanDetail: React.FC = () => {
 															day.activities.map((activity) => (
 																<li key={activity.id}>
 																	<Card className="shadow-lg rounded-lg overflow-hidden my-3">
-																		<div className="flex flex-row items-center p-4">
-																			<Image
-																				alt="HeroUI hero Image"
-																				src={
-																					activity.destination.category.imageUrl
-																				}
-																				width={124}
-																				height={124}
-																				className="rounded-md object-cover"
-																			/>
-																			<div className="flex flex-col ml-2">
-																				<p className="text-xl font-semibold text-gray-800">
-																					{activity.destination.placeName}
-																				</p>
-																				<p className="text-sm text-gray-600">
-																					{activity.destination.description}
-																				</p>
-																				<p className="text-sm text-gray-500">
-																					{activity.destination.address}
-																				</p>
+																		<div className="flex flex-row items-center justify-between p-4">
+																			<div className="flex flex-row items-center">
+																				<Image
+																					alt="Destination Image"
+																					src={
+																						activity.destination.category
+																							.imageUrl
+																					}
+																					width={124}
+																					height={124}
+																					className="rounded-md object-cover"
+																				/>
+																				<div className="flex flex-col ml-2">
+																					<p className="text-xl font-semibold text-gray-800">
+																						{activity.destination.placeName}
+																					</p>
+																					<p className="text-sm text-gray-600">
+																						{activity.destination.description}
+																					</p>
+																					<p className="text-sm text-gray-500">
+																						{activity.destination.address}
+																					</p>
+																				</div>
 																			</div>
+																			<button
+																				onClick={() =>
+																					handleDeleteDestination(activity.id)
+																				}
+																				className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
+																			>
+																				Delete
+																			</button>
 																		</div>
 																	</Card>
 																</li>
